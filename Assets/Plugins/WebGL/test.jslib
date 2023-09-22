@@ -1,8 +1,26 @@
 mergeInto(LibraryManager.library, {
 
-  GameOver: function () {
+  UnityException: function (reason) {
 	window.dispatchReactUnityEvent(
-		"GameOver"
+		"UnityException", reason
+	);
+  },
+
+  ValidCheck: function (data) {
+	window.dispatchReactUnityEvent(
+		"ValidCheck", data
+	);
+  },
+
+  ScorePoint: function (hitSide) {
+	window.dispatchReactUnityEvent(
+		"ScorePoint", hitSide
+	);
+  },
+
+  MovePaddle: function (pos) {
+	window.dispatchReactUnityEvent(
+		"MovePaddle", pos
 	);
   },
 

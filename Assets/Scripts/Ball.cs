@@ -10,6 +10,8 @@ public class Ball : MonoBehaviour
 	const float movePower = 15f;
 	const float initPosY = 0.8f;
 
+	private Ball() { }
+
 	void Awake()
 	{
 		instance = this;
@@ -33,13 +35,31 @@ public class Ball : MonoBehaviour
 		transform.position = new Vector3(0, initPosY, 0);
 	}
 
-	public void Reset()
+	public void SetBall(Vector3 dir, Vector3 pos)
 	{
-		float randX = Random.Range(0, 2) * -2 + 1;
-		float randZ = (Random.Range(0, 2) * -2 + 1) * Random.Range(0.2f, 0.7f);
-		moveDir.x = randX;
-		moveDir.z = randZ;
+		moveDir = dir;
+		transform.position = pos;
+	}
+
+	public void ReSetBall(Vector3 dir)
+	{
+		moveDir = dir;
 		transform.position = new Vector3(0, initPosY, 0);
+	}
+
+	public Vector3 GetPos()
+	{
+		return transform.position;
+	}
+
+	public Vector3 GetScale()
+	{
+		return transform.localScale;
+	}
+
+	public float GetSpeed()
+	{
+		return movePower;
 	}
 
 	void OnCollisionEnter(Collision collision)

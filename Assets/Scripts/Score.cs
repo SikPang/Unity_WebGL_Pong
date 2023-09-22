@@ -6,10 +6,12 @@ using UnityEngine;
 
 public class Score : MonoBehaviour
 {
+	[DllImport("__Internal")]
+	private static extern void UnityException(string reason);
+	
 	const string scoreInitText = "0";
 	const string leftWinText = "Left player wins!";
 	const string rightWinText = "Right player wins!";
-	const int maxScore = 5;
 
 	[SerializeField] TextMeshProUGUI leftScoreText;
 	[SerializeField] TextMeshProUGUI rightScoreText;
@@ -19,6 +21,8 @@ public class Score : MonoBehaviour
 
 	int leftScore;
 	int rightScore;
+
+	private Score() { }
 
 	void Awake()
 	{
@@ -45,23 +49,27 @@ public class Score : MonoBehaviour
 		return instance;
 	}
 
-	bool CheckFinish()
+	public void Finish(GameManager.GameOverStruct gos)
 	{
-		if (leftScore == maxScore ||  rightScore == maxScore) 
+		if (gos.winner == Enums.PlayerSide.LEFT)
+			winText.text = leftWinText + " " + gos.reason;
+		else if (gos.winner == Enums.PlayerSide.RIGHT)
+			winText.text = rightWinText + " " + gos.reason;
+		else
 		{
-			if (leftScore > rightScore)
-				winText.text = leftWinText;
-			else
-				winText.text = rightWinText;
-			winText.gameObject.SetActive(true);
-			return true;
+#if UNITY_WEBGL == true && UNITY_EDITOR == false
+	UnityException("Score.Finish() : PlayerSide is NONE");
+#endif
 		}
-		return false;
+
+		leftScoreText.text = gos.leftScore.ToString();
+		rightScoreText.text = gos.rightScore.ToString();
+		winText.gameObject.SetActive(true);
 	}
 
-	public void GetPoint(Detector.Side side)
+	public void GetPoint(Enums.PlayerSide side)
 	{
-		if (side == Detector.Side.Right)
+		if (side == Enums.PlayerSide.RIGHT)
 		{
 			++leftScore;
 			leftScoreText.text = leftScore.ToString();
@@ -71,6 +79,5 @@ public class Score : MonoBehaviour
 			++rightScore;
 			rightScoreText.text = rightScore.ToString();
 		}
-		gameManager.NextGame(CheckFinish());
 	}
 }
