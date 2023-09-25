@@ -7,7 +7,7 @@ using UnityEngine;
 public class Score : MonoBehaviour
 {
 	[DllImport("__Internal")]
-	private static extern void UnityException(string reason);
+	private static extern void UnityException(string data);
 	
 	const string scoreInitText = "0";
 	const string leftWinText = "Left player wins!";
@@ -49,7 +49,7 @@ public class Score : MonoBehaviour
 		return instance;
 	}
 
-	public void Finish(GameManager.GameOverStruct gos)
+	public void Finish(JsonStructs.GameOver gos)
 	{
 		if (gos.winner == Enums.PlayerSide.LEFT)
 			winText.text = leftWinText + " " + gos.reason;

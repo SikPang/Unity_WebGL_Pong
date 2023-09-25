@@ -5,23 +5,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-	public struct GameOverStruct
-	{
-		public Enums.PlayerSide winner;
-		public int leftScore;
-		public int rightScore;
-		public string reason;
-		public GameOverStruct(Enums.PlayerSide winner, int leftScore, int rightScore, string reason)
-		{
-			this.winner = winner;
-			this.leftScore = leftScore;
-			this.rightScore = rightScore;
-			this.reason = reason;
-		}
-	}
-
 	[DllImport("__Internal")]
-	private static extern void UnityException(string reason);
+	private static extern void UnityException(string data);
 
 	static GameManager instance;
 	[SerializeField] Paddle leftPaddle;
@@ -68,8 +53,9 @@ public class GameManager : MonoBehaviour
 	}
 
 	// call from react
-	public void SetMySide(Enums.PlayerSide side)
+	public void SetMySide(string data)
 	{
+		Enums.PlayerSide side = JsonUtility.FromJson<Enums.PlayerSide>(data);
 		score.Initialize();
 		mySide = side;
 
@@ -86,37 +72,36 @@ public class GameManager : MonoBehaviour
 	}
 
 	// call from react
-	public void StartGame(string ballDir, bool isFirst)
+	public void StartGame(string data)
 	{
-		if (isFirst)
+		JsonStructs.StartGame sgs = JsonUtility.FromJson<JsonStructs.StartGame>(data);
+		if (sgs.isFirst)
 		{
 			score.Initialize();
 			validCheckCoroutine = StartCoroutine(ValidChecker.GetInstance().StartValidCheck());
 		}
-		Vector3 dir = JsonUtility.FromJson<Vector3>(ballDir);
-		NextGame(dir);
+		NextGame(sgs.ballDir);
 	}
 
 	// call from react
 	public void GameOver(string data)
 	{
 		ball.Initialize();
-
 		StopCoroutine(validCheckCoroutine);
-		GameOverStruct gos = JsonUtility.FromJson<GameOverStruct>(data);
+		JsonStructs.GameOver gos = JsonUtility.FromJson<JsonStructs.GameOver>(data);
 		score.Finish(gos);
 	}
 
 	private void Update()
 	{
 		// ---- Test ----
-		if (Input.GetKeyDown(KeyCode.Alpha1))
+/*		if (Input.GetKeyDown(KeyCode.Alpha1))
 			SetMySide(Enums.PlayerSide.LEFT);
 		if (Input.GetKeyDown(KeyCode.Alpha2))
-			StartGame(JsonUtility.ToJson(new Vector3(1f, 0f, 1f)), true);
+			StartGame(JsonUtility.ToJson(new JsonUtility.Start)  JsonUtility.ToJson(new Vector3(1f, 0f, 1f)), true);
 		if (Input.GetKeyDown(KeyCode.Alpha3))
 			StartGame(JsonUtility.ToJson(new Vector3(1f, 0f, 1f)), false);
 		if (Input.GetKeyDown(KeyCode.Alpha4))
-			GameOver(JsonUtility.ToJson(new GameOverStruct(Enums.PlayerSide.LEFT, 5, 0, "Test")));
+			GameOver(JsonUtility.ToJson(new JsonStructs.GameOver(Enums.PlayerSide.LEFT, 5, 0, "Test")));*/
 	}
 }

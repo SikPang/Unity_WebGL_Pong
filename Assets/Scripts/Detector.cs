@@ -6,7 +6,7 @@ using UnityEngine;
 public class Detector : MonoBehaviour
 {
 	[DllImport("__Internal")]
-	private static extern void ScorePoint(Enums.PlayerSide hitSide);
+	private static extern void ScorePoint(string data);
 
 	[SerializeField] Enums.PlayerSide detectorSide;
     Score score;
@@ -22,8 +22,9 @@ public class Detector : MonoBehaviour
 	{
         score.GetPoint(detectorSide);
         ball.Initialize();
+        string data = JsonUtility.ToJson(detectorSide);
 #if UNITY_WEBGL == true && UNITY_EDITOR == false
-	ScorePoint(detectorSide);
+	ScorePoint(data);
 #endif
 	}
 }

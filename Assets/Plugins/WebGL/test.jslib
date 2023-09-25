@@ -1,8 +1,8 @@
 mergeInto(LibraryManager.library, {
 
-  UnityException: function (reason) {
+  UnityException: function (data) {
 	window.dispatchReactUnityEvent(
-		"UnityException", reason
+		"UnityException", data
 	);
   },
 
@@ -12,15 +12,15 @@ mergeInto(LibraryManager.library, {
 	);
   },
 
-  ScorePoint: function (hitSide) {
+  ScorePoint: function (data) {
 	window.dispatchReactUnityEvent(
-		"ScorePoint", hitSide
+		"ScorePoint", data
 	);
   },
 
-  MovePaddle: function (pos) {
+  MovePaddle: function (data) {
 	window.dispatchReactUnityEvent(
-		"MovePaddle", pos
+		"MovePaddle", data
 	);
   },
 

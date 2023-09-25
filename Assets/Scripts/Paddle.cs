@@ -11,7 +11,7 @@ public class Paddle : MonoBehaviour
 	const float movePower = 1000f;
 
 	[DllImport("__Internal")]
-	private static extern void MovePaddle(string pos);
+	private static extern void MovePaddle(string data);
 
 	[SerializeField] Enums.PlayerSide paddleSide;
 	Rigidbody body;
