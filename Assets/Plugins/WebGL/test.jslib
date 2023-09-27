@@ -12,12 +12,6 @@ mergeInto(LibraryManager.library, {
 	);
   },
 
-  ScorePoint: function (data) {
-	window.dispatchReactUnityEvent(
-		"ScorePoint", data
-	);
-  },
-
   MovePaddle: function (data) {
 	window.dispatchReactUnityEvent(
 		"MovePaddle", data

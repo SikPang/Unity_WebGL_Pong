@@ -17,7 +17,6 @@ public class Score : MonoBehaviour
 	[SerializeField] TextMeshProUGUI rightScoreText;
 	[SerializeField] TextMeshProUGUI winText;
 	static Score instance;
-	GameManager gameManager;
 
 	int leftScore;
 	int rightScore;
@@ -27,11 +26,6 @@ public class Score : MonoBehaviour
 	void Awake()
 	{
 		Initialize();
-	}
-
-	void Start()
-	{
-		gameManager = GameManager.GetInstance();
 	}
 
 	public void Initialize()

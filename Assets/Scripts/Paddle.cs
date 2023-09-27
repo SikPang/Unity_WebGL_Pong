@@ -23,7 +23,7 @@ public class Paddle : MonoBehaviour
 		body = GetComponent<Rigidbody>();
 		isAvailable = false;
 		dir = 0f;
-		Initialize();
+		ResetPos();
 	}
 
 	void Update()
@@ -51,7 +51,7 @@ public class Paddle : MonoBehaviour
 		}
 	}
 
-	public void Initialize()
+	public void ResetPos()
 	{
 		if (paddleSide == Enums.PlayerSide.LEFT)
 			transform.position = new Vector3(leftInitPosX, initPosY, 0);
@@ -89,8 +89,8 @@ public class Paddle : MonoBehaviour
 	{
 		if (!isAvailable)
 		{
-			Vector3 pos = JsonUtility.FromJson<Vector3>(paddlePos);
-			transform.position = pos;
+			JsonStructs.MoveOpponentsPaddle pos = JsonUtility.FromJson<JsonStructs.MoveOpponentsPaddle>(paddlePos);
+			transform.position = new Vector3(pos.paddlePosX, pos.paddlePosY, pos.paddlePosZ);
 		}
 	}
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
@@ -7,7 +8,8 @@ public class GameManager : MonoBehaviour
 {
 	[DllImport("__Internal")]
 	private static extern void UnityException(string data);
-
+	[DllImport("__Internal")]
+	private static extern void ValidCheck(string data);
 	static GameManager instance;
 	[SerializeField] Paddle leftPaddle;
 	[SerializeField] Paddle rightPaddle;
@@ -48,25 +50,22 @@ public class GameManager : MonoBehaviour
 	public void NextGame(Vector3 ballDir)
 	{
 		ball.ReSetBall(ballDir);
-		leftPaddle.Initialize();
-		rightPaddle.Initialize();
+		leftPaddle.ResetPos();
+		rightPaddle.ResetPos();
 	}
 
-	// call from react
-	public void SetMySide(string data)
+	IEnumerator StartValidCheck()
 	{
-		Enums.PlayerSide side = JsonUtility.FromJson<Enums.PlayerSide>(data);
-		score.Initialize();
-		mySide = side;
-
-		if (side == Enums.PlayerSide.LEFT)
-			leftPaddle.SetAvailable();
-		else if (side == Enums.PlayerSide.RIGHT)
-			rightPaddle.SetAvailable();
-		else
+		while (true)
 		{
+			float nextTime = Random.Range(1f, 5f);
+
+			yield return new WaitForSecondsRealtime(nextTime);
+
+			string data = JsonUtility.ToJson(new JsonStructs.ValidCheckStruct(leftPaddle, rightPaddle, ball));
+
 #if UNITY_WEBGL == true && UNITY_EDITOR == false
-	UnityException("GameManager.SetMySide() : PlayerSide is NONE");
+	ValidCheck(data);
 #endif
 		}
 	}
@@ -77,10 +76,21 @@ public class GameManager : MonoBehaviour
 		JsonStructs.StartGame sgs = JsonUtility.FromJson<JsonStructs.StartGame>(data);
 		if (sgs.isFirst)
 		{
+			mySide = sgs.side;
+			if (mySide == Enums.PlayerSide.LEFT)
+				leftPaddle.SetAvailable();
+			else if (mySide == Enums.PlayerSide.RIGHT)
+				rightPaddle.SetAvailable();
+			else
+			{
+#if UNITY_WEBGL == true && UNITY_EDITOR == false
+	UnityException("GameManager.StartGame() : PlayerSide is NONE");
+#endif
+			}
 			score.Initialize();
-			validCheckCoroutine = StartCoroutine(ValidChecker.GetInstance().StartValidCheck());
+			validCheckCoroutine = StartCoroutine(StartValidCheck());
 		}
-		NextGame(sgs.ballDir);
+		NextGame(new Vector3(sgs.ballDirX, sgs.ballDirY, sgs.ballDirZ));
 	}
 
 	// call from react
@@ -95,13 +105,24 @@ public class GameManager : MonoBehaviour
 	private void Update()
 	{
 		// ---- Test ----
-/*		if (Input.GetKeyDown(KeyCode.Alpha1))
-			SetMySide(Enums.PlayerSide.LEFT);
+		if (Input.GetKeyDown(KeyCode.Alpha1))
+			StartGame(JsonUtility.ToJson(new JsonStructs.StartGame(Enums.PlayerSide.LEFT, 1f, 0f, 1f, true)));
 		if (Input.GetKeyDown(KeyCode.Alpha2))
-			StartGame(JsonUtility.ToJson(new JsonUtility.Start)  JsonUtility.ToJson(new Vector3(1f, 0f, 1f)), true);
+			StartGame(JsonUtility.ToJson(new JsonStructs.StartGame(Enums.PlayerSide.LEFT, 1f, 0f, -1f, false)));
 		if (Input.GetKeyDown(KeyCode.Alpha3))
-			StartGame(JsonUtility.ToJson(new Vector3(1f, 0f, 1f)), false);
+			GameOver(JsonUtility.ToJson(new JsonStructs.GameOver(Enums.PlayerSide.LEFT, 5, 2, "Test")));
 		if (Input.GetKeyDown(KeyCode.Alpha4))
-			GameOver(JsonUtility.ToJson(new JsonStructs.GameOver(Enums.PlayerSide.LEFT, 5, 0, "Test")));*/
+		{
+			string data = JsonUtility.ToJson(new JsonStructs.ValidCheckStruct(leftPaddle, rightPaddle, ball));
+#if UNITY_WEBGL == true && UNITY_EDITOR == false
+	ValidCheck(data);
+#endif
+		}
+		if (Input.GetKeyDown(KeyCode.Alpha5))
+		{
+#if UNITY_WEBGL == true && UNITY_EDITOR == false
+	UnityException("Test Exception");
+#endif
+		}
 	}
 }
