@@ -1,5 +1,11 @@
 mergeInto(LibraryManager.library, {
 
+  Init: function () {
+	window.dispatchReactUnityEvent(
+		"Init"
+	);
+  },
+
   UnityException: function (data) {
 	window.dispatchReactUnityEvent(
 		"UnityException", data

@@ -10,6 +10,9 @@ public class GameManager : MonoBehaviour
 	private static extern void UnityException(string data);
 	[DllImport("__Internal")]
 	private static extern void ValidCheck(string data);
+	[DllImport("__Internal")]
+	private static extern void Init();
+
 	static GameManager instance;
 	[SerializeField] Paddle leftPaddle;
 	[SerializeField] Paddle rightPaddle;
@@ -17,6 +20,7 @@ public class GameManager : MonoBehaviour
 	Ball ball;
 	Enums.PlayerSide mySide;
 	Coroutine validCheckCoroutine;
+	bool isOver;
 
 	private GameManager() { }
 
@@ -29,17 +33,26 @@ public class GameManager : MonoBehaviour
 	{
 		score = Score.GetInstance();
 		ball = Ball.GetInstance();
+#if UNITY_WEBGL == true && UNITY_EDITOR == false
+	Init();
+#endif
 	}
 
 	void Inintialize()
 	{
 		instance = this;
+		isOver = false;
 		mySide = Enums.PlayerSide.NONE;
 	}
 
 	public static GameManager GetInstance()
 	{
 		return instance;
+	}
+
+	public bool GetIsOver()
+	{
+		return isOver;
 	}
 
 	public Enums.PlayerSide GetMySide()
@@ -54,6 +67,7 @@ public class GameManager : MonoBehaviour
 		rightPaddle.ResetPos();
 	}
 
+	// call js function
 	IEnumerator StartValidCheck()
 	{
 		while (true)
@@ -91,6 +105,7 @@ public class GameManager : MonoBehaviour
 			validCheckCoroutine = StartCoroutine(StartValidCheck());
 		}
 		NextGame(new Vector3(sgs.ballDirX, sgs.ballDirY, sgs.ballDirZ));
+		isOver = false;
 	}
 
 	// call from react
@@ -100,6 +115,7 @@ public class GameManager : MonoBehaviour
 		StopCoroutine(validCheckCoroutine);
 		JsonStructs.GameOver gos = JsonUtility.FromJson<JsonStructs.GameOver>(data);
 		score.Finish(gos);
+		isOver = true;
 	}
 
 	private void Update()

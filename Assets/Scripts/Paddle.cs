@@ -17,6 +17,7 @@ public class Paddle : MonoBehaviour
 	Rigidbody body;
 	float dir;
 	bool isAvailable;
+	GameManager gameManager;
 
 	void Awake()
 	{
@@ -24,6 +25,11 @@ public class Paddle : MonoBehaviour
 		isAvailable = false;
 		dir = 0f;
 		ResetPos();
+	}
+
+	void Start()
+	{
+		gameManager = GameManager.GetInstance();
 	}
 
 	void Update()
@@ -42,7 +48,7 @@ public class Paddle : MonoBehaviour
 
 		//body.MovePosition(body.position + moveDir * movePower * Time.deltaTime);
 		body.velocity = new Vector3(0, 0, dir * Time.deltaTime);
-		if (dir != 0f)
+		if (dir != 0f && !gameManager.GetIsOver())
 		{
 			string pos = JsonUtility.ToJson(transform.position);
 #if UNITY_WEBGL == true && UNITY_EDITOR == false
