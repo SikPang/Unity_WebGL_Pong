@@ -4,6 +4,14 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
+// SynchronizeBallPos 보완 (max값 보정 후 테스트)
+// startGame Delay (카운트 하기)
+// 난이도 차이 주기 (공 속도.. 이건 걍 서버에서? startGame에서 공 속도 받아와서 적용하기 구현?)
+// startGame에 leftScore, rightScore 받아서 적용
+// gameOver reason (enum to string)
+// paddle 움직임 가끔 맛탱이 감..
+// 프레임 제어
+
 public class GameManager : MonoBehaviour
 {
 	[DllImport("__Internal")]
@@ -33,8 +41,10 @@ public class GameManager : MonoBehaviour
 	{
 		score = Score.GetInstance();
 		ball = Ball.GetInstance();
+
+		// call js function
 #if UNITY_WEBGL == true && UNITY_EDITOR == false
-	Init();
+		Init();
 #endif
 	}
 
@@ -78,8 +88,9 @@ public class GameManager : MonoBehaviour
 
 			string data = JsonUtility.ToJson(new JsonStructs.ValidCheckStruct(leftPaddle, rightPaddle, ball));
 
+			// call js function
 #if UNITY_WEBGL == true && UNITY_EDITOR == false
-	ValidCheck(data);
+			ValidCheck(data);
 #endif
 		}
 	}
@@ -97,8 +108,9 @@ public class GameManager : MonoBehaviour
 				rightPaddle.SetAvailable();
 			else
 			{
+				// call js function
 #if UNITY_WEBGL == true && UNITY_EDITOR == false
-	UnityException("GameManager.StartGame() : PlayerSide is NONE");
+				UnityException("GameManager.StartGame() : PlayerSide is NONE");
 #endif
 			}
 			score.Initialize();
@@ -116,29 +128,5 @@ public class GameManager : MonoBehaviour
 		JsonStructs.GameOver gos = JsonUtility.FromJson<JsonStructs.GameOver>(data);
 		score.Finish(gos);
 		isOver = true;
-	}
-
-	private void Update()
-	{
-		// ---- Test ----
-		if (Input.GetKeyDown(KeyCode.Alpha1))
-			StartGame(JsonUtility.ToJson(new JsonStructs.StartGame(Enums.PlayerSide.LEFT, 1f, 0f, 1f, true)));
-		if (Input.GetKeyDown(KeyCode.Alpha2))
-			StartGame(JsonUtility.ToJson(new JsonStructs.StartGame(Enums.PlayerSide.LEFT, 1f, 0f, -1f, false)));
-		if (Input.GetKeyDown(KeyCode.Alpha3))
-			GameOver(JsonUtility.ToJson(new JsonStructs.GameOver(Enums.PlayerSide.LEFT, 5, 2, "Test")));
-		if (Input.GetKeyDown(KeyCode.Alpha4))
-		{
-			string data = JsonUtility.ToJson(new JsonStructs.ValidCheckStruct(leftPaddle, rightPaddle, ball));
-#if UNITY_WEBGL == true && UNITY_EDITOR == false
-	ValidCheck(data);
-#endif
-		}
-		if (Input.GetKeyDown(KeyCode.Alpha5))
-		{
-#if UNITY_WEBGL == true && UNITY_EDITOR == false
-	UnityException("Test Exception");
-#endif
-		}
 	}
 }

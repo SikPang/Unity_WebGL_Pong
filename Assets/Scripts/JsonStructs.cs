@@ -36,16 +36,41 @@ public static class JsonStructs
 		}
 	}
 
-	public struct MoveOpponentsPaddle
+	public struct BallHit
+	{
+		public float ballPosX;
+		public float ballPosY;
+		public float ballPosZ;
+		public float ballDirX;
+		public float ballDirY;
+		public float ballDirZ;
+		public BallHit(Vector3 ballPos, Vector3 ballDir)
+		{
+			ballPosX = ballPos.x;
+			ballPosY = ballPos.y;
+			ballPosZ = ballPos.z;
+			ballDirX = ballDir.x;
+			ballDirY = ballDir.y;
+			ballDirZ = ballDir.z;
+		}
+	}
+
+	public struct MovePaddle
 	{
 		public float paddlePosX;
 		public float paddlePosY;
 		public float paddlePosZ;
-		public MoveOpponentsPaddle(float paddlePosX, float paddlePosY, float paddlePosZ)
+		public MovePaddle(float paddlePosX, float paddlePosY, float paddlePosZ)
 		{
 			this.paddlePosX = paddlePosX;
 			this.paddlePosY = paddlePosY;
 			this.paddlePosZ = paddlePosZ;
+		}
+		public MovePaddle(Vector3 paddlePos)
+		{
+			this.paddlePosX = paddlePos.x;
+			this.paddlePosY = paddlePos.y;
+			this.paddlePosZ = paddlePos.z;
 		}
 	}
 

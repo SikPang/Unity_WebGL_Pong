@@ -51,8 +51,9 @@ public class Score : MonoBehaviour
 			winText.text = rightWinText + " " + gos.reason;
 		else
 		{
+			// call js function
 #if UNITY_WEBGL == true && UNITY_EDITOR == false
-	UnityException("Score.Finish() : PlayerSide is NONE");
+			UnityException("Score.Finish() : PlayerSide is NONE");
 #endif
 		}
 

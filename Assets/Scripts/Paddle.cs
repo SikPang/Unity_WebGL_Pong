@@ -7,7 +7,7 @@ public class Paddle : MonoBehaviour
 {
 	const float leftInitPosX = -18.5f;
 	const float rightInitPosX = 18.5f;
-	const float initPosY = 0.78f;
+	const float initPosY = 0.85f;
 	const float movePower = 1000f;
 
 	[DllImport("__Internal")]
@@ -50,9 +50,11 @@ public class Paddle : MonoBehaviour
 		body.velocity = new Vector3(0, 0, dir * Time.deltaTime);
 		if (dir != 0f && !gameManager.GetIsOver())
 		{
-			string pos = JsonUtility.ToJson(transform.position);
+			string pos = JsonUtility.ToJson(new JsonStructs.MovePaddle(transform.position));
+
+			// call js function
 #if UNITY_WEBGL == true && UNITY_EDITOR == false
-	MovePaddle(pos);
+			MovePaddle(pos);
 #endif
 		}
 	}
@@ -93,10 +95,7 @@ public class Paddle : MonoBehaviour
 	// call from react
 	public void MoveOpponentPaddle(string paddlePos)
 	{
-		if (!isAvailable)
-		{
-			JsonStructs.MoveOpponentsPaddle pos = JsonUtility.FromJson<JsonStructs.MoveOpponentsPaddle>(paddlePos);
-			transform.position = new Vector3(pos.paddlePosX, pos.paddlePosY, pos.paddlePosZ);
-		}
+		JsonStructs.MovePaddle pos = JsonUtility.FromJson<JsonStructs.MovePaddle>(paddlePos);
+		transform.position = new Vector3(pos.paddlePosX, pos.paddlePosY, pos.paddlePosZ);
 	}
 }

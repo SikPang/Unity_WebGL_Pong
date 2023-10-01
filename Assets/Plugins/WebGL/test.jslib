@@ -8,19 +8,25 @@ mergeInto(LibraryManager.library, {
 
   UnityException: function (data) {
 	window.dispatchReactUnityEvent(
-		"UnityException", data
+		"UnityException", UTF8ToString(data)
 	);
   },
 
   ValidCheck: function (data) {
 	window.dispatchReactUnityEvent(
-		"ValidCheck", data
+		"ValidCheck", UTF8ToString(data)
 	);
   },
 
   MovePaddle: function (data) {
 	window.dispatchReactUnityEvent(
-		"MovePaddle", data
+		"MovePaddle", UTF8ToString(data)
+	);
+  },
+
+  BallHit: function (data) {
+	window.dispatchReactUnityEvent(
+		"BallHit", UTF8ToString(data)
 	);
   },
 
