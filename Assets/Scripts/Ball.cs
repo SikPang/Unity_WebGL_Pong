@@ -10,8 +10,8 @@ public class Ball : MonoBehaviour
 	private static extern void BallHit(string data);
 
 	static Ball instance;
+	SphereCollider collider;
 	Vector3 moveDir;
-	GameManager gameManager;
 	const float movePower = 15f;
 	const float initPosY = 0.8f;
 
@@ -20,12 +20,8 @@ public class Ball : MonoBehaviour
 	void Awake()
 	{
 		instance = this;
+		collider = GetComponent<SphereCollider>();
 		Initialize();
-	}
-
-	void Start()
-	{
-		gameManager = GameManager.GetInstance();
 	}
 
 	void Update()
@@ -45,13 +41,12 @@ public class Ball : MonoBehaviour
 		transform.position = new Vector3(0, initPosY, 0);
 	}
 
-	public void SetBall(Vector3 dir, Vector3 pos)
+	public void SetColliderOff()
 	{
-		moveDir = dir;
-		transform.position = pos;
+		collider.enabled = false;
 	}
 
-	public void ReSetBall(Vector3 dir)
+	public void ResetBall(Vector3 dir)
 	{
 		moveDir = dir;
 		transform.position = new Vector3(0, initPosY, 0);
@@ -72,6 +67,7 @@ public class Ball : MonoBehaviour
 		return movePower;
 	}
 
+	// Only detect collision when you are the host (== leftPlayer)
 	void OnCollisionEnter(Collision collision)
 	{
 		Vector3 normal = collision.contacts[0].normal; // ¹ý¼±º¤ÅÍ
@@ -80,19 +76,19 @@ public class Ball : MonoBehaviour
 		string data = JsonUtility.ToJson(new JsonStructs.BallHit(transform.position, moveDir));
 
 		// call js function
-		if (gameManager.GetMySide() == Enums.PlayerSide.LEFT)
-		{
 #if UNITY_WEBGL == true && UNITY_EDITOR == false
-		BallHit(data);
+			BallHit(data);
 #endif
-		}
 	}
 
 	// call from react
 	public void SynchronizeBallPos(string ballData)
 	{
 		JsonStructs.BallHit bhs = JsonUtility.FromJson<JsonStructs.BallHit>(ballData);
-		transform.position = new Vector3(bhs.ballPosX, bhs.ballPosY, bhs.ballPosZ);
+/*		bhs.ballPosX = Mathf.Clamp(bhs.ballPosX, -19.2f, 19.2f);
+		bhs.ballPosZ = Mathf.Clamp(bhs.ballPosZ, -14.2f, 14.2f);*/
+
 		moveDir = new Vector3(bhs.ballDirX, bhs.ballDirY, bhs.ballDirZ);
+		transform.position = new Vector3(bhs.ballPosX, bhs.ballPosY, bhs.ballPosZ);
 	}
 }

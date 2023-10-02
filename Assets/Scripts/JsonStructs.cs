@@ -26,8 +26,8 @@ public static class JsonStructs
 		public Enums.PlayerSide winner;
 		public int leftScore;
 		public int rightScore;
-		public string reason;
-		public GameOver(Enums.PlayerSide winner, int leftScore, int rightScore, string reason)
+		public Enums.GameEndStatus reason;
+		public GameOver(Enums.PlayerSide winner, int leftScore, int rightScore, Enums.GameEndStatus reason)
 		{
 			this.winner = winner;
 			this.leftScore = leftScore;

@@ -45,10 +45,21 @@ public class Score : MonoBehaviour
 
 	public void Finish(JsonStructs.GameOver gos)
 	{
+		string reason = "";
+		switch (gos.reason)
+		{
+			case Enums.GameEndStatus.CHEATING:
+				reason = " <Cheating>";
+				break;
+			case Enums.GameEndStatus.DISCONNECT:
+				reason = " <Disconnect>";
+				break;
+		}
+
 		if (gos.winner == Enums.PlayerSide.LEFT)
-			winText.text = leftWinText + " " + gos.reason;
+			winText.text = leftWinText + reason;
 		else if (gos.winner == Enums.PlayerSide.RIGHT)
-			winText.text = rightWinText + " " + gos.reason;
+			winText.text = rightWinText + reason;
 		else
 		{
 			// call js function
@@ -74,5 +85,15 @@ public class Score : MonoBehaviour
 			++rightScore;
 			rightScoreText.text = rightScore.ToString();
 		}
+	}
+
+	public void SetTextActive(bool state)
+	{
+		winText.gameObject.SetActive(state);
+	}
+
+	public void SetText(string text)
+	{
+		winText.text = text;
 	}
 }
