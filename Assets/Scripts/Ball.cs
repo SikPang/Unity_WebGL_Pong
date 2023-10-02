@@ -48,7 +48,7 @@ public class Ball : MonoBehaviour
 
 	public void ResetBall(Vector3 dir)
 	{
-		moveDir = dir;
+		moveDir = dir.normalized;
 		transform.position = new Vector3(0, initPosY, 0);
 	}
 
@@ -89,6 +89,7 @@ public class Ball : MonoBehaviour
 		bhs.ballPosZ = Mathf.Clamp(bhs.ballPosZ, -14.2f, 14.2f);*/
 
 		moveDir = new Vector3(bhs.ballDirX, bhs.ballDirY, bhs.ballDirZ);
+		moveDir = moveDir.normalized;
 		transform.position = new Vector3(bhs.ballPosX, bhs.ballPosY, bhs.ballPosZ);
 	}
 }

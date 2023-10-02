@@ -8,6 +8,11 @@ using UnityEngine;
 // # startGame Delay (카운트 하기)
 // # 프레임 제어
 // # gameOver reason (enum to string)
+
+// # ballDir Normalized
+// # ball Initialized when NextGame
+// # frame 30 고정
+
 // 난이도 차이 주기 (공 속도.. 이건 걍 서버에서? startGame에서 공 속도 받아와서 적용하기 구현?)
 // startGame에 leftScore, rightScore 받아서 적용
 // paddle 움직임 가끔 맛탱이 감..
@@ -50,7 +55,7 @@ public class GameManager : MonoBehaviour
 
 	void Inintialize()
 	{
-		Application.targetFrameRate = 45;
+		Application.targetFrameRate = 30;
 		instance = this;
 		isOver = false;
 		mySide = Enums.PlayerSide.NONE;
@@ -73,6 +78,7 @@ public class GameManager : MonoBehaviour
 
 	IEnumerator NextGame(Vector3 ballDir)
 	{
+		ball.Initialize();
 		score.SetText("Get Ready...");
 		score.SetTextActive(true);
 		yield return new WaitForSecondsRealtime(1f);
