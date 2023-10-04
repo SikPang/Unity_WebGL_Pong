@@ -14,6 +14,7 @@ public class Paddle : MonoBehaviour
 	private static extern void MovePaddle(string data);
 
 	[SerializeField] Enums.PlayerSide paddleSide;
+	[SerializeField] GameObject MeText;
 	Rigidbody body;
 	float dir;
 	bool isAvailable;
@@ -90,6 +91,14 @@ public class Paddle : MonoBehaviour
 	public void SetAvailable()
 	{
 		isAvailable = true;
+		StartCoroutine(DisplayMeText());
+	}
+
+	IEnumerator DisplayMeText()
+	{
+		MeText.SetActive(true);
+		yield return new WaitForSecondsRealtime(5.0f);
+		MeText.SetActive(false);
 	}
 
 	// call from react

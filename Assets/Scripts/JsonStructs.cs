@@ -10,13 +10,19 @@ public static class JsonStructs
 		public float ballDirX;
 		public float ballDirY;
 		public float ballDirZ;
+		public int leftScore;
+		public int rightScore;
+		public float ballSpeed;
 		public bool isFirst;
-		public StartGame(Enums.PlayerSide side, float ballDirX, float ballDirY, float ballDirZ, bool isFirst)
+		public StartGame(Enums.PlayerSide side, float ballDirX, float ballDirY, float ballDirZ, int leftScore, int rightScore, float ballSpeed, bool isFirst)
 		{
 			this.side = side;
 			this.ballDirX = ballDirX;
 			this.ballDirY = ballDirY;
 			this.ballDirZ = ballDirZ;
+			this.leftScore = leftScore;
+			this.rightScore = rightScore;
+			this.ballSpeed = ballSpeed;
 			this.isFirst = isFirst;
 		}
 	}

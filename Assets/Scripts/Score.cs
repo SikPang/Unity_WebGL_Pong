@@ -73,18 +73,10 @@ public class Score : MonoBehaviour
 		winText.gameObject.SetActive(true);
 	}
 
-	public void GetPoint(Enums.PlayerSide side)
+	public void SetPoint(int leftScore, int rightScore)
 	{
-		if (side == Enums.PlayerSide.RIGHT)
-		{
-			++leftScore;
-			leftScoreText.text = leftScore.ToString();
-		}
-		else
-		{
-			++rightScore;
-			rightScoreText.text = rightScore.ToString();
-		}
+		leftScoreText.text = leftScore.ToString();
+		rightScoreText.text = rightScore.ToString();
 	}
 
 	public void SetTextActive(bool state)

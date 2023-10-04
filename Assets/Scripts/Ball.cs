@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 
 public class Ball : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class Ball : MonoBehaviour
 	static Ball instance;
 	SphereCollider collider;
 	Vector3 moveDir;
-	const float movePower = 15f;
+	float movePower;
 	const float initPosY = 0.8f;
 
 	private Ball() { }
@@ -21,6 +22,8 @@ public class Ball : MonoBehaviour
 	{
 		instance = this;
 		collider = GetComponent<SphereCollider>();
+		movePower = 0f;
+		moveDir = Vector3.zero;
 		Initialize();
 	}
 
@@ -50,6 +53,11 @@ public class Ball : MonoBehaviour
 	{
 		moveDir = dir.normalized;
 		transform.position = new Vector3(0, initPosY, 0);
+	}
+
+	public void SetBallSpeed(float speed)
+	{
+		movePower = speed;
 	}
 
 	public Vector3 GetPos()

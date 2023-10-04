@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using UnityEngine;
 
 // # SynchronizeBallPos 보완 (max값 보정 후 테스트) -> host일 때만 공의 충돌 감지
@@ -130,11 +131,14 @@ public class GameManager : MonoBehaviour
 				UnityException("GameManager.StartGame() : PlayerSide is NONE");
 #endif
 			}
+			ball.SetBallSpeed(sgs.ballSpeed);
 			score.Initialize();
 			validCheckCoroutine = StartCoroutine(StartValidCheck());
 		}
+		score.SetPoint(sgs.leftScore, sgs.rightScore);
 		StartCoroutine(NextGame(new Vector3(sgs.ballDirX, sgs.ballDirY, sgs.ballDirZ)));
 		isOver = false;
+		
 	}
 
 	// call from react
@@ -151,9 +155,9 @@ public class GameManager : MonoBehaviour
 	{
 		// ---- Test ----
 		if (Input.GetKeyDown(KeyCode.Alpha1))
-			StartGame(JsonUtility.ToJson(new JsonStructs.StartGame(Enums.PlayerSide.LEFT, 1f, 0f, 1f, true)));
+			StartGame(JsonUtility.ToJson(new JsonStructs.StartGame(Enums.PlayerSide.LEFT, 1f, 0f, 1f, 1, 1, 15f, true)));
 		if (Input.GetKeyDown(KeyCode.Alpha2))
-			StartGame(JsonUtility.ToJson(new JsonStructs.StartGame(Enums.PlayerSide.LEFT, 1f, 0f, -1f, false)));
+			StartGame(JsonUtility.ToJson(new JsonStructs.StartGame(Enums.PlayerSide.LEFT, 1f, 0f, -1f, 1, 1, 15f, false)));
 		if (Input.GetKeyDown(KeyCode.Alpha3))
 			GameOver(JsonUtility.ToJson(new JsonStructs.GameOver(Enums.PlayerSide.LEFT, 5, 2, Enums.GameEndStatus.NORNAL)));
 		if (Input.GetKeyDown(KeyCode.Alpha4))
