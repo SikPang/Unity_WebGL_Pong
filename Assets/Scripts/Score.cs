@@ -49,10 +49,13 @@ public class Score : MonoBehaviour
 		switch (gos.reason)
 		{
 			case Enums.GameEndStatus.CHEATING:
-				reason = " <Cheating>";
+				reason = " [ Cheating ]";
 				break;
 			case Enums.GameEndStatus.DISCONNECT:
-				reason = " <Disconnect>";
+				reason = " [ Disconnect ]";
+				break;
+			case Enums.GameEndStatus.OUTGAME:
+				reason = " [ OUT OF FOCUS ]";
 				break;
 		}
 

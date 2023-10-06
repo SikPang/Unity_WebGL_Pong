@@ -31,6 +31,7 @@ public static class Enums
 		NORNAL = 0,
 		CHEATING = 1,
 		DISCONNECT = 2,
+		OUTGAME = 3,
 	}
 
 	public enum PlayerStatus

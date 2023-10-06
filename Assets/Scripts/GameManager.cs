@@ -5,19 +5,6 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using UnityEngine;
 
-// # SynchronizeBallPos 보완 (max값 보정 후 테스트) -> host일 때만 공의 충돌 감지
-// # startGame Delay (카운트 하기)
-// # 프레임 제어
-// # gameOver reason (enum to string)
-
-// # ballDir Normalized
-// # ball Initialized when NextGame
-// # frame 30 고정
-
-// 난이도 차이 주기 (공 속도.. 이건 걍 서버에서? startGame에서 공 속도 받아와서 적용하기 구현?)
-// startGame에 leftScore, rightScore 받아서 적용
-// paddle 움직임 가끔 맛탱이 감..
-
 public class GameManager : MonoBehaviour
 {
 	[DllImport("__Internal")]
@@ -35,6 +22,8 @@ public class GameManager : MonoBehaviour
 	Enums.PlayerSide mySide;
 	Coroutine validCheckCoroutine;
 	bool isOver;
+	const float MinTimeOfValidCheck = 5f;
+	const float MaxTimeOfValidCheck = 10f;
 
 	private GameManager() { }
 
@@ -56,7 +45,6 @@ public class GameManager : MonoBehaviour
 
 	void Inintialize()
 	{
-		Application.targetFrameRate = 30;
 		instance = this;
 		isOver = false;
 		mySide = Enums.PlayerSide.NONE;
@@ -82,9 +70,17 @@ public class GameManager : MonoBehaviour
 		ball.Initialize();
 		score.SetText("Get Ready...");
 		score.SetTextActive(true);
+
 		yield return new WaitForSecondsRealtime(1f);
+		if (isOver)
+			yield break;
+
 		score.SetText("Start!");
+
 		yield return new WaitForSecondsRealtime(1f);
+		if (isOver)
+			yield break;
+
 		score.SetTextActive(false);
 
 		ball.ResetBall(ballDir);
@@ -97,9 +93,11 @@ public class GameManager : MonoBehaviour
 		while (true)
 		{
 			// 테스트용 시간
-			float nextTime = Random.Range(1f, 5f);
+			float nextTime = Random.Range(MinTimeOfValidCheck, MaxTimeOfValidCheck);
 
 			yield return new WaitForSecondsRealtime(nextTime);
+			if (isOver)
+				yield break;
 
 			string data = JsonUtility.ToJson(new JsonStructs.ValidCheckStruct(leftPaddle, rightPaddle, ball));
 
@@ -155,9 +153,9 @@ public class GameManager : MonoBehaviour
 	{
 		// ---- Test ----
 		if (Input.GetKeyDown(KeyCode.Alpha1))
-			StartGame(JsonUtility.ToJson(new JsonStructs.StartGame(Enums.PlayerSide.LEFT, 1f, 0f, 1f, 1, 1, 15f, true)));
+			StartGame(JsonUtility.ToJson(new JsonStructs.StartGame(Enums.PlayerSide.LEFT, 1f, 0f, 0.05f, 1, 1, 500f, true)));
 		if (Input.GetKeyDown(KeyCode.Alpha2))
-			StartGame(JsonUtility.ToJson(new JsonStructs.StartGame(Enums.PlayerSide.LEFT, 1f, 0f, -1f, 1, 1, 15f, false)));
+			StartGame(JsonUtility.ToJson(new JsonStructs.StartGame(Enums.PlayerSide.LEFT, 1f, 0f, -1f, 1, 1, 1000f, false)));
 		if (Input.GetKeyDown(KeyCode.Alpha3))
 			GameOver(JsonUtility.ToJson(new JsonStructs.GameOver(Enums.PlayerSide.LEFT, 5, 2, Enums.GameEndStatus.NORNAL)));
 		if (Input.GetKeyDown(KeyCode.Alpha4))

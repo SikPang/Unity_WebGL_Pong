@@ -12,6 +12,7 @@ public class Ball : MonoBehaviour
 
 	static Ball instance;
 	SphereCollider collider;
+	Rigidbody body;
 	Vector3 moveDir;
 	float movePower;
 	const float initPosY = 0.8f;
@@ -22,6 +23,7 @@ public class Ball : MonoBehaviour
 	{
 		instance = this;
 		collider = GetComponent<SphereCollider>();
+		body = GetComponent<Rigidbody>();
 		movePower = 0f;
 		moveDir = Vector3.zero;
 		Initialize();
@@ -30,7 +32,8 @@ public class Ball : MonoBehaviour
 	void Update()
 	{
 		if (moveDir != Vector3.zero)
-			transform.Translate(moveDir * movePower * Time.deltaTime);
+			body.velocity = moveDir * movePower * Time.deltaTime;
+		//transform.Translate(moveDir * movePower * Time.deltaTime);
 	}
 
 	public static Ball GetInstance()
