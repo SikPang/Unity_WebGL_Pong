@@ -31,8 +31,7 @@ public class Ball : MonoBehaviour
 
 	void Update()
 	{
-		if (moveDir != Vector3.zero)
-			body.velocity = moveDir * movePower * Time.deltaTime;
+		body.velocity = movePower * Time.deltaTime * moveDir;
 		//transform.Translate(moveDir * movePower * Time.deltaTime);
 	}
 
