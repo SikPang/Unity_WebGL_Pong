@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -10,8 +11,8 @@ public class Score : MonoBehaviour
 	private static extern void UnityException(string data);
 	
 	const string scoreInitText = "0";
-	const string leftWinText = "Left player wins!";
-	const string rightWinText = "Right player wins!";
+	const string youWinText = "You Win !";
+	const string youLoseText = "You Lose ..";
 
 	[SerializeField] TextMeshProUGUI leftScoreText;
 	[SerializeField] TextMeshProUGUI rightScoreText;
@@ -46,29 +47,26 @@ public class Score : MonoBehaviour
 	public void Finish(JsonStructs.GameOver gos)
 	{
 		string reason = "";
-		switch (gos.reason)
-		{
-			case Enums.GameEndStatus.CHEATING:
-				reason = "\n[ Cheating ]";
-				break;
-			case Enums.GameEndStatus.DISCONNECT:
-				reason = "\n[ Disconnect ]";
-				break;
-			case Enums.GameEndStatus.OUTGAME:
-				reason = "\n[ Out Of Focus ]";
-				break;
-		}
+		string target = "";
 
-		if (gos.winner == Enums.PlayerSide.LEFT)
-			winText.text = leftWinText + reason;
-		else if (gos.winner == Enums.PlayerSide.RIGHT)
-			winText.text = rightWinText + reason;
+		if (gos.reason == Enums.GameEndStatus.CHEATING)
+			reason = "cheated]";
+		else if (gos.reason == Enums.GameEndStatus.DISCONNECT)
+			reason = "disconnected]";
+		else if (gos.reason == Enums.GameEndStatus.OUTGAME)
+			reason = "got lazy]";
+
+		if (gos.winner == GameManager.GetInstance().GetMySide())
+		{
+			if (gos.reason != Enums.GameEndStatus.NORNAL)
+				target = "\n[your opponent ";
+			winText.text = youWinText + target + reason;
+		}
 		else
 		{
-			// call js function
-#if UNITY_WEBGL == true && UNITY_EDITOR == false
-			UnityException("Score.Finish() : PlayerSide is NONE");
-#endif
+			if (gos.reason != Enums.GameEndStatus.NORNAL)
+				target = "\n[you ";
+			winText.text = youLoseText + target + reason;
 		}
 
 		leftScoreText.text = gos.leftScore.ToString();

@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class Paddle : MonoBehaviour
 {
-	const float leftInitPosX = -18.5f;
-	const float rightInitPosX = 18.5f;
+	const float leftInitPosX = -18f;
+	const float rightInitPosX = 18f;
 	const float initPosY = 0.85f;
 	const float movePower = 1000f;
 
