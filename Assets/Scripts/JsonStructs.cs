@@ -50,7 +50,8 @@ public static class JsonStructs
 		public float ballDirX;
 		public float ballDirY;
 		public float ballDirZ;
-		public BallHit(Vector3 ballPos, Vector3 ballDir)
+		public bool score;
+		public BallHit(Vector3 ballPos, Vector3 ballDir, bool score)
 		{
 			ballPosX = ballPos.x;
 			ballPosY = ballPos.y;
@@ -58,6 +59,7 @@ public static class JsonStructs
 			ballDirX = ballDir.x;
 			ballDirY = ballDir.y;
 			ballDirZ = ballDir.z;
+			this.score = score;
 		}
 	}
 

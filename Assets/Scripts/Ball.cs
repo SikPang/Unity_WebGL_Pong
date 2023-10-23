@@ -11,7 +11,7 @@ public class Ball : MonoBehaviour
 	private static extern void BallHit(string data);
 
 	static Ball instance;
-	SphereCollider collider;
+	SphereCollider myCollider;
 	Rigidbody body;
 	Vector3 moveDir;
 	float movePower;
@@ -22,7 +22,7 @@ public class Ball : MonoBehaviour
 	void Awake()
 	{
 		instance = this;
-		collider = GetComponent<SphereCollider>();
+		myCollider = GetComponent<SphereCollider>();
 		body = GetComponent<Rigidbody>();
 		movePower = 0f;
 		moveDir = Vector3.zero;
@@ -48,7 +48,7 @@ public class Ball : MonoBehaviour
 
 	public void SetColliderOff()
 	{
-		collider.enabled = false;
+		myCollider.enabled = false;
 	}
 
 	public void ResetBall(Vector3 dir)
@@ -83,7 +83,12 @@ public class Ball : MonoBehaviour
 		Vector3 normal = collision.contacts[0].normal; // ¹ý¼±º¤ÅÍ
 		moveDir = Vector3.Reflect(moveDir, normal).normalized; // ¹Ý»çº¤ÅÍ
 
-		string data = JsonUtility.ToJson(new JsonStructs.BallHit(transform.position, moveDir));
+		bool isDetector;
+		if (collision.gameObject.CompareTag("Detector"))
+			isDetector = true;
+		else
+			isDetector = false;
+		string data = JsonUtility.ToJson(new JsonStructs.BallHit(transform.position, moveDir, isDetector));
 
 		// call js function
 #if UNITY_WEBGL == true && UNITY_EDITOR == false

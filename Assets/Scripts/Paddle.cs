@@ -8,7 +8,7 @@ public class Paddle : MonoBehaviour
 	const float leftInitPosX = -18f;
 	const float rightInitPosX = 18f;
 	const float initPosY = 0.85f;
-	const float movePower = 1000f;
+	const float movePower = 1300f;
 
 	[DllImport("__Internal")]
 	private static extern void MovePaddle(string data);

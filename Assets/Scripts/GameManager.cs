@@ -5,12 +5,6 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using UnityEngine;
 
-/*
-1. 승패 텍스트 Side에서 You로 바꿈
-2. 왼쪽 패들 x -18, 오른쪽 패들 x -18로 바꿈
-3. 
-*/
-
 public class GameManager : MonoBehaviour
 {
 	[DllImport("__Internal")]
@@ -90,8 +84,6 @@ public class GameManager : MonoBehaviour
 		score.SetTextActive(false);
 
 		ball.ResetBall(ballDir);
-		leftPaddle.ResetPos();
-		rightPaddle.ResetPos();
 	}
 
 	IEnumerator StartValidCheck()
@@ -159,9 +151,9 @@ public class GameManager : MonoBehaviour
 	{
 		// ---- Test ----
 		if (Input.GetKeyDown(KeyCode.Alpha1))
-			StartGame(JsonUtility.ToJson(new JsonStructs.StartGame(Enums.PlayerSide.RIGHT, 1f, 0f, 0.05f, 1, 1, 500f, true)));
+			StartGame(JsonUtility.ToJson(new JsonStructs.StartGame(Enums.PlayerSide.LEFT, -1f, 0f, -1f, 1, 1, 500f, true)));
 		if (Input.GetKeyDown(KeyCode.Alpha2))
-			StartGame(JsonUtility.ToJson(new JsonStructs.StartGame(Enums.PlayerSide.LEFT, 1f, 0f, -1f, 1, 1, 1000f, false)));
+			StartGame(JsonUtility.ToJson(new JsonStructs.StartGame(Enums.PlayerSide.LEFT, -1f, 0f, -1f, 1, 1, 1000f, false)));
 		if (Input.GetKeyDown(KeyCode.Alpha3))
 			GameOver(JsonUtility.ToJson(new JsonStructs.GameOver(Enums.PlayerSide.LEFT, 5, 2, Enums.GameEndStatus.DISCONNECT)));
 		if (Input.GetKeyDown(KeyCode.Alpha4))
