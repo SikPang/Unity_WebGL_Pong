@@ -147,11 +147,11 @@ public class GameManager : MonoBehaviour
 		isOver = true;
 	}
 
-/*	private void Update()
+	private void Update()
 	{
 		// ---- Test ----
 		if (Input.GetKeyDown(KeyCode.Alpha1))
-			StartGame(JsonUtility.ToJson(new JsonStructs.StartGame(Enums.PlayerSide.LEFT, -1f, 0f, -1f, 1, 1, 500f, true)));
+			StartGame(JsonUtility.ToJson(new JsonStructs.StartGame(Enums.PlayerSide.RIGHT, -1f, 0f, -1f, 1, 1, 500f, true)));
 		if (Input.GetKeyDown(KeyCode.Alpha2))
 			StartGame(JsonUtility.ToJson(new JsonStructs.StartGame(Enums.PlayerSide.LEFT, -1f, 0f, -1f, 1, 1, 1000f, false)));
 		if (Input.GetKeyDown(KeyCode.Alpha3))
@@ -169,5 +169,5 @@ public class GameManager : MonoBehaviour
 	UnityException("Test Exception");
 #endif
 		}
-	}*/
+	}
 }
