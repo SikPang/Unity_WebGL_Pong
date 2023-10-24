@@ -147,7 +147,7 @@ public class GameManager : MonoBehaviour
 		isOver = true;
 	}
 
-	private void Update()
+/*	private void Update()
 	{
 		// ---- Test ----
 		if (Input.GetKeyDown(KeyCode.Alpha1))
@@ -169,5 +169,5 @@ public class GameManager : MonoBehaviour
 	UnityException("Test Exception");
 #endif
 		}
-	}
+	}*/
 }
