@@ -91,6 +91,11 @@ public class Paddle : MonoBehaviour
 	public void SetAvailable()
 	{
 		isAvailable = true;
+		// 미리 누르고있는 상황에서의 처리
+		if (Input.GetKey(KeyCode.UpArrow))
+			dir += movePower;
+		if (Input.GetKey(KeyCode.DownArrow))
+			dir -= movePower;
 		StartCoroutine(DisplayMeText());
 	}
 
