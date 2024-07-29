@@ -71,13 +71,13 @@ public class GameManager : MonoBehaviour
 		score.SetText("Get Ready...");
 		score.SetTextActive(true);
 
-		yield return new WaitForSecondsRealtime(1f);
+/*		yield return new WaitForSecondsRealtime(1f);
 		if (isOver)
-			yield break;
+			yield break;*/
 
 		score.SetText("Start!");
 
-		yield return new WaitForSecondsRealtime(1f);
+		yield return new WaitForSecondsRealtime(0.5f);
 		if (isOver)
 			yield break;
 
@@ -137,6 +137,14 @@ public class GameManager : MonoBehaviour
 		
 	}
 
+	public void Next()
+	{
+		isOver = false;
+		float ranX = Random.Range(-0.98f, 0.98f);
+		float ranZ = Random.Range(-0.98f, 0.98f);
+		StartCoroutine(NextGame(new Vector3(ranX, 0f, ranZ)));
+	}
+
 	// call from react
 	public void GameOver(string data)
 	{
@@ -147,11 +155,11 @@ public class GameManager : MonoBehaviour
 		isOver = true;
 	}
 
-/*	private void Update()
+	private void Update()
 	{
 		// ---- Test ----
 		if (Input.GetKeyDown(KeyCode.Alpha1))
-			StartGame(JsonUtility.ToJson(new JsonStructs.StartGame(Enums.PlayerSide.RIGHT, -1f, 0f, -1f, 1, 1, 500f, true)));
+			StartGame(JsonUtility.ToJson(new JsonStructs.StartGame(Enums.PlayerSide.LEFT, -0.38f, 0f, -0.15f, 1, 1, 100000f, true)));
 		if (Input.GetKeyDown(KeyCode.Alpha2))
 			StartGame(JsonUtility.ToJson(new JsonStructs.StartGame(Enums.PlayerSide.LEFT, -1f, 0f, -1f, 1, 1, 1000f, false)));
 		if (Input.GetKeyDown(KeyCode.Alpha3))
@@ -169,5 +177,5 @@ public class GameManager : MonoBehaviour
 	UnityException("Test Exception");
 #endif
 		}
-	}*/
+	}
 }
